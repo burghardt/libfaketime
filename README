@@ -14,15 +14,13 @@ I used some code from:
  - libsafe : http://www.bell-labs.com/org/11356/libsafe.html,
 
 To build the library:
-	./configure	(This will configure package for your system)
-        make            (This will make both faketime.so
-                         as well as some sample programs)
+        make            (This will make libfaketime.so.0)
         make install    (make install must be done as root)
 
-LibFakeTime library have two configure option (e.g. ./configure --option),
-     --enable-gcc-debug (This enable _very_ noisy debug code,
+LibFakeTime library have two configure option (see Makefile),
+     -DDEBUG            (This enable _very_ noisy debug code,
         (optional)       not very useful for normal users, just for programers)
-        --enable-killer (This enable killer code,
+     -DKILLER           (This enable killer code,
         (optional)       if library cannot read fake code from file,
                          it will kill your process. Useful with programs
                          writting timestamps - cannot get fake time,
@@ -31,7 +29,7 @@ LibFakeTime library have two configure option (e.g. ./configure --option),
 
 The makefile will only copy the library and man page to the appropriate
 directories.  To activate libfaketime, either on a per-process basis or on a
-system-wide basis, see the man page (doc/libfaketime.8, Section "Installing
+system-wide basis, see the man page (libfaketime.8, Section "Installing
 libfaketime").
 
 See http://www.underground.org.pl/einstein/ for more info.
