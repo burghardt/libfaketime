@@ -2,7 +2,7 @@
    LibFakeTime library - fake time() library for GNU/Linux.
    Copyright (c) 2002-2004 Krzysztof Burghardt <einstein@underground.org.pl>.
    
-   $Id: libfaketime.c,v 1.2 2004-09-21 11:02:03 kb Exp $
+   $Id: libfaketime.c,v 1.3 2004-11-15 19:09:51 kb Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -297,7 +297,7 @@ _libfaketime_init (void)
   if (time_to_return)
     {
       real_time = FALSE;
-#ifdef HAVE_SYSLOG_H
+#ifdef SYSLOG
       openlog ("LibFakeTime", LOG_CONS | LOG_NDELAY, LOG_USER);
       syslog (LOG_WARNING,
 	      "using FAKE time() for (%s:%i) UID(%i) EUID(%i)",

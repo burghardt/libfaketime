@@ -19,12 +19,12 @@
 
 all: libfaketime.so.0
 
-CFLAGS = -DVERSION="20040921"
+CFLAGS = -DVERSION="20040921" -DSYSLOG
 # -DDEBUG
 # -DKILLER
 
 libfaketime.so.0: libfaketime.o
-	$(CC) -shared libfaketime.o -ldl -Wl,-soname -Wl,libfaketime.so.0 -o libfaketime.so.0
+	$(CC) -shared libfaketime.o -fPIC -ldl -Wl,-soname -Wl,libfaketime.so.0 -o libfaketime.so.0
 
 libfaketime.o: libfaketime.c libfaketime.h
 	$(CC) $(CFLAGS) -O2 -c libfaketime.c -fPIC -DPIC -o libfaketime.o

@@ -17,7 +17,9 @@ To build the library:
         make            (This will make libfaketime.so.0)
         make install    (make install must be done as root)
 
-LibFakeTime library have two configure option (see Makefile),
+LibFakeTime library have three configure option (see Makefile),
+     -DSYSLOG           (This enable syslog code,
+        (optional)       when program using fake time a message is print to log)
      -DDEBUG            (This enable _very_ noisy debug code,
         (optional)       not very useful for normal users, just for programers)
      -DKILLER           (This enable killer code,
