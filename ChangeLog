@@ -1,0 +1,28 @@
+2004-09-21 Krzysztof Burghardt
+	* src/lib/libfaketime.c: fixed to be "thread safe"
+
+2004-03-25 Krzysztof Burghardt
+	* src/lib/libfaketime.c: added support for gettimeofday with
+	  working tv_usec. (Without it _most_ programs failed to work.)
+
+2003-03-26 Krzysztof Burghardt
+	* src/lib/libfaketime.c: fixed (annother) BUG in get_exe code when
+	  running SUID/SGID binaries on new kernels (e.g. 2.2.26pre1 and
+	  2.4.21pre) or any kernels witch Alan patch for ptrace vulnerability
+	  (e.g. CAN-2003-0127),
+
+2002-05-21 Krzysztof Burghardt
+	* src/lib/libfaketime.c: fixed BUG in get_exe code when running
+	  SUID/SGID binaries,
+	* src/lib/libfaketime.c: fixed BUG in time() now it changing value
+	  no delta detection no time freezes,
+	* src/lib/libfaketime.c: caching time readed from file
+	  (only one file access per one proces, in 1.0.0 it was one file access
+	   per one time() call which is not a best idea (programs works slow
+	   and HDD was use too much)),
+	* src/lib/libfaketime.c: added some debug code,
+	* libfaketime.8: man page :-)
+
+2002-05-20 Krzysztof Burghardt
+	* src/lib/libfaketime.c: loading from /etc/ld.so.preload file
+	  (against SUID/SGID binaries),

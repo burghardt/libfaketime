@@ -1,0 +1,236 @@
+.\" libfaketime.8 --
+.\"
+.\" Copyright (c) 2002-2004 Krzysztof Burghardt <einstein@underground.org.pl>.
+.\"
+.TH LIBfaketime 8 "25 Mar 2004" "Linux`s Utilities" "Linux Users` Manual"
+.SH NAME
+libfaketime \- library which adds filter to time() call
+.SH SYNOPSIS
+.BI "it`s a libraty so you can`t execute it directly"
+.SH DESCRIPTION
+.B libfaketime
+is a
+.BR SO\ library
+which provides flters in
+.BR time()
+function.
+.SS
+libfaketime can:
+.HP
+- return fakeed time to some programs,
+.HP
+- have user-wide (~/.libfaketime.d/) and system-wide (/etc/libfaketime.d/) configuration,
+.HP
+- work transparency for programs,
+.SH OPTIONS
+Library doesn`t need any options.
+.SH Where\ to\ get\ libfaketime
+.PP
+The source code for libfaketime can be found at
+http://www.underground.org.pl/einstein/
+.SH Installing\ libfaketime
+.TP 3
+.TP
+1.
+If you install libfaketime on Linux, make sure that your shared loader
+(ld-linux.so.1/ld.so) understands \fR\&\f(CWLD_PRELOAD\fR. (Best if ld.so-1.8.5
+or more recent)
+.TP
+2.
+Change to the lib directory.
+.TP
+3.
+Type \fR\&\f(CWmake\fR to compile and build libfaketime.so.1.
+.TP
+4.
+Type \fR\&\f(CWmake install\fR to install the libfaketime library and associated
+programs in their final destination locations.
+.TP
+5.
+To use libfaketime, set the environment variable \fR\&\f(CWLD_PRELOAD\fR to
+point to the libfaketime library. Example (sh syntax):
+.IP
+
+.nf
+.ft 3
+.in +0.3i
+      LD_PRELOAD=/lib/libfaketime.so.1
+      export LD_PRELOAD
+.fi
+.in -0.3i
+.ft R
+.lp
+
+\&\fR
+.IP
+or (csh syntax):
+.IP
+
+.nf
+.ft 3
+.in +0.3i
+      setenv LD_PRELOAD /lib/libfaketime.so.1
+.fi
+.in -0.3i
+.ft R
+.lp
+
+.IP
+You might want to put these lines in your \fR\&\f(CW.profile\fR or
+\&\fR\&\f(CW.cshrc\fR in order to activate libfaketime for all processes that you
+initiate.
+.TP
+6.
+Use your programs as you would normally.  libfaketime will transparently check the
+time() callers and if detect that should report fakeed time will change clock value for this program.
+If a filtered time() is used, the following will occur:
+.RS
+.PD 0
+.TP 3
+1.
+If library detect that fakeed time should be returned and -DSYSLOG was defined in compile flags an entry will be added to /var/log/messages.
+The following is an example of such an entry:
+.RS
+Mar 26 20:20:22 techie Libfaketime: using FAKE time() for (vmware:14654) UID(500) EUID(0)
+.RE
+.TP
+2.
+If library cannot get fakeed time, and -DKILLER was defined in compile flags... library do _exit().
+(To prevent making timestamps.)
+.TP
+.RE
+.BR
+.PP
+For security reasons, the dynamic loader disregards environmental
+variables such as \fR\&\f(CWLD_PRELOAD\fR when executing set-uid programs.
+However, on Linux, you can use libfaketime with set-uid programs too, by using
+one of the two methods described below:
+.TP 3
+1.
+You may append the path to \fR\&libfaketime.so.1\fR into
+\&\fR\&\f(CW/etc/ld.so.preload\fR instead of using
+\fR\&\f(CWLD_PRELOAD\fR.
+.IP
+\&\fBWARNING\fR: If you use \fR\&\f(CW/etc/ld.so.preload\fR, be sure to
+install \fR\&\f(CWlibfaketime.so.1\fR on your root filesystem, for
+instance in \&\fR\&\f(CW/lib\fR, as is done by the default installation. Using
+a directory which is not available at boot time, such as /usr/local/lib will
+cause trouble at the next reboot! You also mustn`t define -DKILLER if you want
+to use libfaketime loaded from \fR\&\f(CW/etc/ld.so.preload\fR, because it will
+atempt to kill your INIT proces when booting.
+.IP
+You should also be careful to remove libfaketime from
+\fR\&\f(CW/etc/ld.so.preload\fR when installing a new version.  First
+test it out using \fR\&\f(CWLD_PRELOAD\fR, and only if everything is ok, put it
+back into \&\fR\&\f(CW/etc/ld.so.preload\fR.
+
+.TP
+2.
+If you have a version of \fR\&\f(CWld.so\fR which is more recent than
+\&\fR\&\f(CW1.9.0\fR, you can set \fR\&\f(CWLD_PRELOAD\fR to just contain the
+basename of \fR\&\f(CWlibfaketime.so.1\fR without the directory.  In that
+case, the file is found as long as it is in the shared library path (which
+usually contains \fR\&\f(CW/lib\fR and \fR\&\f(CW/usr/lib\fR)).
+Because the search is restricted to the library search path, this also works
+for set-uid programs.
+Example (sh syntax):
+.IP
+
+.nf
+.ft 3
+.in +0.3i
+      LD_PRELOAD=libfaketime.so.1
+      export LD_PRELOAD
+.fi
+.in -0.3i
+.ft R
+.lp
+
+\&\fR
+.IP
+or (csh syntax):
+.IP
+
+.nf
+.ft 3
+.in +0.3i
+      setenv LD_PRELOAD libfaketime.so.1
+.fi
+.in -0.3i
+.ft R
+.lp
+
+\&\fR
+.IP
+The advantage of this approach over \fR\&\f(CWld.so.preload\fR is that
+libfaketime can more easily be switched off in case something goes wrong.
+From the other hand LD_PRELOAD can be easier removed by brograms,
+and time() hooking will not work :-(
+.PP
+
+.SH Using libfaketime
+.iX "c Symbolic links"
+.PP
+Once libfaketime is installed and either LD_PRELOAD or /etc/ld.so.preload has been
+appropriate configured (e.g. in compile time you can define three compilation flags),
+there is something else to do.  The processes to be monitored must have their own
+files in configuration directory (e.g. ~/.libfaketime.d/ for user-wide and
+/etc/libfaketime.d/ for system-wide configuration).
+.PP
+Now you can put <programname>.nofake to system configuration directory,
+this disallow users form fakeing time for this programs (useful for mailers,
+which should have valid date and time).
+.PP
+In user and system-wide configuration dyrectory you can put <programname>.fake
+with time in seconds since 00:00:00, Jan 1, 1970.
+How to get it? It`s easy try... for example...
+.BR date\ -d\ "31\ july\ 1983\ 5:40"\ +%s
+
+.PP
+.SH How\ it\ works
+libfaketime uses a novel method for performing detection and handling of time().
+The method intercepts all calls to library functions that are known to give
+time/date.  A substitute version of the corresponding function implements the
+original functionality, but in a manner that ensures that only program not
+listed in *.fake files can get valid (real) time/date. Read sources for more
+information.
+.SH FILES
+.HP
+.I /lib/libfaketime.so.<version>
+- main library
+.HP
+.I /usr/man/man8/libfaketime.8
+- manual page
+.HP
+.I /etc/libfaketime.d/
+- system-wide configuration directory,
+.HP
+.I ~/.libfaketime.d/
+- user-wide configuration directory,
+.SH "FILE FORMAT"
+.I ~/.libfaketime.d/
+and
+.I /etc/libfaketime.d/
+.P
+You have to put a separate files for each programs.
+.P
+For example:
+.P
+into file called
+.I date
+you puts fixed time() value which date will always get.
+.SH "SEE ALSO"
+.BR libsafe (8),
+.BR date (1),
+.BR time (2),
+.BR dlsym (3),
+.BR ld.so (8),
+.BR ldd (1)
+.SH HISTORY
+The 1st libfaketime version (1.0.0) appeared in 20 May 2002.
+.SH BUGS
+A lot of ;^)
+.SH AUTHOR
+This library was written by Krzysztof Burghardt <einstein@underground.org.pl>
+and may be freely distributed under the terms of the GNU General Public License.
+There is ABSOLUTELY NO WARRANTY for this program.
