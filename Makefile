@@ -19,7 +19,7 @@
 
 all: libfaketime.so.1
 
-CFLAGS = -Wall -DVERSION="20071101"
+CFLAGS = -Wall -O2 -DVERSION="20071101"
 # -DDEBUG
 # -DKILLER
 
