@@ -19,7 +19,7 @@
 
 all: libfaketime.so.1
 
-CFLAGS = -Wall -O2 -DVERSION="20071101"
+CFLAGS = -DVERSION="20071101"
 # -DDEBUG
 # -DKILLER
 
@@ -27,7 +27,7 @@ libfaketime.so.1: libfaketime.o
 	$(CC) -shared libfaketime.o -fPIC -ldl -Wl,-soname -Wl,libfaketime.so.1 -o libfaketime.so.1
 
 libfaketime.o: libfaketime.c libfaketime.h
-	$(CC) $(CFLAGS) -O2 -c libfaketime.c -fPIC -DPIC -o libfaketime.o
+	$(CC) $(CFLAGS) -Wall -O2 -c libfaketime.c -fPIC -DPIC -o libfaketime.o
 
 install:
 	install -c -s -m 0755 libfaketime.so.1 /lib
