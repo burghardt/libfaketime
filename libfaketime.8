@@ -1,33 +1,33 @@
 .\" libfaketime.8 --
 .\"
-.\" Copyright (c) 2002-2004 Krzysztof Burghardt <einstein@underground.org.pl>.
+.\" Copyright (c) 2002-2004 Krzysztof Burghardt <krzysztof@burghardt.pl>.
 .\"
-.TH LIBfaketime 8 "25 Mar 2004" "Linux`s Utilities" "Linux Users` Manual"
+.TH LIBFAKETIME 8 "25 Mar 2004" "Linux`s Utilities" "Linux Users` Manual"
 .SH NAME
 libfaketime \- library which adds filter to time() call
 .SH SYNOPSIS
-.BI "it`s a libraty so you can`t execute it directly"
+.BI "it`s a library so you cannot execute it directly"
 .SH DESCRIPTION
 .B libfaketime
 is a
 .BR SO\ library
-which provides flters in
+which provides filters in
 .BR time()
 function.
 .SS
 libfaketime can:
 .HP
-- return fakeed time to some programs,
+- return fake time to some programs,
 .HP
 - have user-wide (~/.libfaketime.d/) and system-wide (/etc/libfaketime.d/) configuration,
 .HP
 - work transparency for programs,
 .SH OPTIONS
-Library doesn`t need any options.
+Library does not need any options.
 .SH Where\ to\ get\ libfaketime
 .PP
 The source code for libfaketime can be found at
-http://www.underground.org.pl/einstein/
+http://www.burghardt.pl/
 .SH Installing\ libfaketime
 .TP 3
 .TP
@@ -82,20 +82,20 @@ initiate.
 .TP
 6.
 Use your programs as you would normally.  libfaketime will transparently check the
-time() callers and if detect that should report fakeed time will change clock value for this program.
+time() callers and if detect that should report fake time will change clock value for this program.
 If a filtered time() is used, the following will occur:
 .RS
 .PD 0
 .TP 3
 1.
-If library detect that fakeed time should be returned and -DSYSLOG was defined in compile flags an entry will be added to /var/log/messages.
+If library detect that fake time should be returned and -DSYSLOG was defined in compile flags an entry will be added to /var/log/messages.
 The following is an example of such an entry:
 .RS
-Mar 26 20:20:22 techie Libfaketime: using FAKE time() for (vmware:14654) UID(500) EUID(0)
+Mar 26 20:20:22 techie Libfaketime: using FAKE time() for (date:14654) UID(500) EUID(0)
 .RE
 .TP
 2.
-If library cannot get fakeed time, and -DKILLER was defined in compile flags... library do _exit().
+If library cannot get fake time, and -DKILLER was defined in compile flags... library do _exit().
 (To prevent making timestamps.)
 .TP
 .RE
@@ -115,13 +115,13 @@ You may append the path to \fR\&libfaketime.so.1\fR into
 install \fR\&\f(CWlibfaketime.so.1\fR on your root filesystem, for
 instance in \&\fR\&\f(CW/lib\fR, as is done by the default installation. Using
 a directory which is not available at boot time, such as /usr/local/lib will
-cause trouble at the next reboot! You also mustn`t define -DKILLER if you want
+cause trouble at the next reboot! You also must not define -DKILLER if you want
 to use libfaketime loaded from \fR\&\f(CW/etc/ld.so.preload\fR, because it will
-atempt to kill your INIT proces when booting.
+attempt to kill your /sbin/init process when booting.
 .IP
 You should also be careful to remove libfaketime from
 \fR\&\f(CW/etc/ld.so.preload\fR when installing a new version.  First
-test it out using \fR\&\f(CWLD_PRELOAD\fR, and only if everything is ok, put it
+test it out using \fR\&\f(CWLD_PRELOAD\fR, and only if everything is OK, put it
 back into \&\fR\&\f(CW/etc/ld.so.preload\fR.
 
 .TP
@@ -181,10 +181,10 @@ Now you can put <programname>.nofake to system configuration directory,
 this disallow users form fakeing time for this programs (useful for mailers,
 which should have valid date and time).
 .PP
-In user and system-wide configuration dyrectory you can put <programname>.fake
+In user and system-wide configuration directory you can put <programname>.fake
 with time in seconds since 00:00:00, Jan 1, 1970.
 How to get it? It`s easy try... for example...
-.BR date\ -d\ "31\ july\ 1983\ 5:40"\ +%s
+.BR date\ -d\ "31\ July\ 1983\ 5:40"\ +%s
 
 .PP
 .SH How\ it\ works
@@ -231,6 +231,6 @@ The 1st libfaketime version (1.0.0) appeared in 20 May 2002.
 .SH BUGS
 A lot of ;^)
 .SH AUTHOR
-This library was written by Krzysztof Burghardt <einstein@underground.org.pl>
+This library was written by Krzysztof Burghardt <krzysztof@burghardt.pl>
 and may be freely distributed under the terms of the GNU General Public License.
 There is ABSOLUTELY NO WARRANTY for this program.
