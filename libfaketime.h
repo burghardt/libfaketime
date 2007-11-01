@@ -1,8 +1,8 @@
 /* 
-   Header for LibFakeTime library. 
-   Copyright (c) 2002-2004 Krzysztof Burghardt <einstein@underground.org.pl>.
+   Header for LibFakeTime library
+   Copyright (c) 2002-2004 Krzysztof Burghardt <krzysztof@burghardt.pl>
    
-   $Id: libfaketime.h,v 1.2 2004-09-21 11:02:03 kb Exp $
+   $Id: libfaketime.h,v 1.3 2007-11-01 08:38:52 kb Exp $
  
    This program is free software; you can redistribute it and/or modify 
    it under the terms of the GNU General Public License as published by 
