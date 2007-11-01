@@ -1,3 +1,6 @@
+2007-11-01 Krzysztof Burghardt
+	* libfaketime.c: add support for clock_gettime()
+
 2004-09-21 Krzysztof Burghardt
 	* libfaketime.c: fixed to be "thread safe"
 
