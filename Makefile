@@ -1,6 +1,6 @@
 #
-#   Makefile for LibFakeTime library.
-#   Copyright (c) 2002-2004 Krzysztof Burghardt <einstein@underground.org.pl>.
+#   Makefile for LibFakeTime library
+#   Copyright (c) 2002-2004 Krzysztof Burghardt <krzysztof@burghardt.pl>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -17,20 +17,20 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-all: libfaketime.so.0
+all: libfaketime.so.1
 
-CFLAGS = -DVERSION="20040921" -DSYSLOG
+CFLAGS = -Wall -DVERSION="20071101"
 # -DDEBUG
 # -DKILLER
 
-libfaketime.so.0: libfaketime.o
-	$(CC) -shared libfaketime.o -fPIC -ldl -Wl,-soname -Wl,libfaketime.so.0 -o libfaketime.so.0
+libfaketime.so.1: libfaketime.o
+	$(CC) -shared libfaketime.o -fPIC -ldl -Wl,-soname -Wl,libfaketime.so.1 -o libfaketime.so.1
 
 libfaketime.o: libfaketime.c libfaketime.h
 	$(CC) $(CFLAGS) -O2 -c libfaketime.c -fPIC -DPIC -o libfaketime.o
 
 install:
-	install -c -s -m 0755 libfaketime.so.0 /lib
+	install -c -s -m 0755 libfaketime.so.1 /lib
 	install -c    -m 0644 libfaketime.8 /usr/share/man/man8/
 
 clean:
