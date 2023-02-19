@@ -18,8 +18,8 @@
 
 #include "libfaketime.h"
 
-static void _libfaketime_init () __attribute__ ((constructor));
-static void _libfaketime_fini () __attribute__ ((destructor));
+static void _libfaketime_init () __attribute__((constructor));
+static void _libfaketime_fini () __attribute__((destructor));
 static void _libfaketime_init (void);
 static void _libfaketime_fini (void);
 
@@ -150,8 +150,7 @@ get_fake_time (char *dir, char *exe)
   if (!fd)
     {
       fake_time = 0;
-      DEBUG_MESSAGE
-	("LibFakeTime: get_fake_time(): cannot open %s\n", path);
+      DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): cannot open %s\n", path);
     }
   else
     {
@@ -228,8 +227,7 @@ gettimeofday (struct timeval *tv, struct timezone *tz)
       /* do not touch tv_usec - it`s extremaly important to return
          _VALID_ tv_usec due to many programs uses this for hi-res timing
          only tv_sec can be (safely) affected */
-      DEBUG_MESSAGE
-	("LibFakeTime: gettimeofday(): setting *tv->tv_sec...\n");
+      DEBUG_MESSAGE ("LibFakeTime: gettimeofday(): setting *tv->tv_sec...\n");
       tv->tv_sec = time (NULL);
     }
   DEBUG_MESSAGE ("LibFakeTime: gettimeofday(): returning retval...\n");
@@ -253,7 +251,7 @@ clock_gettime(clockid_t clk_id, struct timespec *tp)
       return 0;
     }
   struct timeval tv;
-  retval = gettimeofday(&tv, NULL);
+  retval = gettimeofday (&tv, NULL);
   DEBUG_MESSAGE ("LibFakeTime: clock_gettime(): retval = %i...\n", retval);
   if (!retval)
     {
@@ -269,8 +267,8 @@ clock_gettime(clockid_t clk_id, struct timespec *tp)
   return retval;
 };
 
-static void _libfaketime_init () __attribute__ ((constructor));
-static void _libfaketime_fini () __attribute__ ((destructor));
+static void _libfaketime_init () __attribute__((constructor));
+static void _libfaketime_fini () __attribute__((destructor));
 
 static void
 _libfaketime_init (void)
