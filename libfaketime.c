@@ -279,7 +279,7 @@ _libfaketime_init (void)
 
   exe = xmalloc (exe_len);
 
-  lib_handle = dlopen ("/lib/libc.so.6", RTLD_LAZY);
+  lib_handle = dlopen ("libc.so.6", RTLD_LAZY);
   if (!lib_handle)
     {
       fprintf (stderr, "%s\n", dlerror ());
