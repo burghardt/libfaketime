@@ -205,7 +205,7 @@ time (time_t * t)
 }
 
 int
-gettimeofday (struct timeval *tv, struct timezone *tz)
+gettimeofday (struct timeval *tv, void *tz)
 {
   static int retval = 0;
 
@@ -213,13 +213,6 @@ gettimeofday (struct timeval *tv, struct timezone *tz)
   if (!init_done)
     _libfaketime_init ();
 
-  /* Please do not ask me why... ask glibc's3 folks... */
-  if (tv == NULL)
-    {
-      DEBUG_MESSAGE
-	("LibFakeTime: gettimeofday(): returning due to NULL pointers...\n");
-      return 0;
-    }
   retval = (*real_gettimeofday_handle) (tv, tz);
   DEBUG_MESSAGE ("LibFakeTime: gettimeofday(): retval = %i...\n", retval);
   if (!retval)
