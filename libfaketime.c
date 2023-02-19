@@ -154,9 +154,17 @@ get_fake_time (char *dir, char *exe)
     }
   else
     {
-      fgets (buf, buf_len - 1, fd);
-      buf[strlen (buf) - 1] = '\0';
-      fake_time = (time_t) atoi (buf);
+      if (fgets (buf, buf_len - 1, fd) != NULL)
+	{
+	  buf[strlen (buf) - 1] = '\0';
+	  fake_time = (time_t) atoi (buf);
+	}
+      else
+	{
+	  fake_time = 0;
+	  DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): cannot read %s\n",
+			 path);
+	}
       fclose (fd);
       DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): opened %s\n", path);
       DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): readed %s\n", buf);
