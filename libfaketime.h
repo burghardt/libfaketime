@@ -34,7 +34,7 @@
 #define SYS_FAKE_TIME_DIR "/etc/libfaketime.d"
 #define USER_FAKE_TIME_DIR ".libfaketime.d"
 
-/* No fake and nofake files surfix (without dot!) */
+/* No fake and fake files surfix (without dot!) */
 #define NO_FAKE_SURFIX "nofake"
 #define FAKE_SURFIX "fake"
 

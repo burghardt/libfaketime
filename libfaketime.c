@@ -18,10 +18,8 @@
 
 #include "libfaketime.h"
 
-static void _libfaketime_init () __attribute__((constructor));
-static void _libfaketime_fini () __attribute__((destructor));
-static void _libfaketime_init (void);
-static void _libfaketime_fini (void);
+static void _libfaketime_init (void) __attribute__((constructor));
+static void _libfaketime_fini (void) __attribute__((destructor));
 
 extern char **environ[];
 
@@ -60,7 +58,7 @@ xmalloc (int n)
 }
 
 static char *
-mk_path (char *path, char *dir, char *file, char *surfix)
+mk_path (char *path, const char *dir, char *file, const char *surfix)
 {
   sprintf (path, "%s/%s.%s", dir, basename (file), surfix);
 
@@ -106,7 +104,7 @@ get_exe (char *exe, int size)
 }
 
 static int
-can_i_fake_test (char *dir, char *exe)
+can_i_fake_test (const char *dir, char *exe)
 {
   FILE *fd;
   char *path;
@@ -135,10 +133,10 @@ can_i_fake_test (char *dir, char *exe)
 }
 
 static time_t
-get_fake_time (char *dir, char *exe)
+get_fake_time (const char *dir, char *exe)
 {
   FILE *fd;
-  time_t fake_time = 0;
+  time_t read_fake_time = 0;
   static const int buf_len = 1024;
   char *buf;
   char *path;
@@ -149,7 +147,7 @@ get_fake_time (char *dir, char *exe)
   fd = fopen (mk_path (path, dir, exe, FAKE_SURFIX), "r");
   if (!fd)
     {
-      fake_time = 0;
+      read_fake_time = 0;
       DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): cannot open %s\n", path);
     }
   else
@@ -157,11 +155,11 @@ get_fake_time (char *dir, char *exe)
       if (fgets (buf, buf_len - 1, fd) != NULL)
 	{
 	  buf[strlen (buf) - 1] = '\0';
-	  fake_time = (time_t) atoi (buf);
+	  read_fake_time = (time_t) atoi (buf);
 	}
       else
 	{
-	  fake_time = 0;
+	  read_fake_time = 0;
 	  DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): cannot read %s\n",
 			 path);
 	}
@@ -176,8 +174,8 @@ get_fake_time (char *dir, char *exe)
 
   DEBUG_MESSAGE
     ("LibFakeTime: get_fake_time(): returning %i\n",
-     (unsigned int) fake_time);
-  return fake_time;
+     (unsigned int) read_fake_time);
+  return read_fake_time;
 }
 
 time_t
@@ -267,9 +265,6 @@ clock_gettime (clockid_t clk_id __attribute__((unused)), struct timespec *tp)
   DEBUG_MESSAGE ("LibFakeTime: clock_gettime(): returning retval...\n");
   return retval;
 };
-
-static void _libfaketime_init () __attribute__((constructor));
-static void _libfaketime_fini () __attribute__((destructor));
 
 static void
 _libfaketime_init (void)

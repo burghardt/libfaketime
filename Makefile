@@ -18,12 +18,22 @@
 
 all: libfaketime.so.1
 
-CFLAGS = -DVERSION="20071101"
-# -DDEBUG
-# -DKILLER
+CFLAGS = -DVERSION="20230219"
+#CFLAGS += -DDEBUG
+#CFLAGS += -DKILLER
+
+CFLAGS += -Wall -Werror -Wextra -Wdate-time
+CFLAGS += -Wformat -Wformat-security -D_FORTIFY_SOURCE=2
+CFLAGS += -Wcast-align -Wcast-qual -Wchar-subscripts
+CFLAGS += -Wformat-nonliteral -Wpointer-arith -Wredundant-decls
+CFLAGS += -Wreturn-type -Wshadow -Wswitch -Wunused-parameter -Wwrite-strings
+CFLAGS += -fstack-protector-strong -fPIC -fPIE
+
+LDFLAGS += -pie -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+LDFLAGS += -Wl,--as-needed -Wl,-Bsymbolic-functions -Wl,--fatal-warnings
 
 libfaketime.so.1: libfaketime.o
-	$(CC) -shared libfaketime.o -fPIC -ldl -Wl,-soname -Wl,libfaketime.so.1 -o libfaketime.so.1
+	$(CC) $(LDFLAGS) -shared libfaketime.o -fPIC -ldl -Wl,-soname -Wl,libfaketime.so.1 -o libfaketime.so.1
 
 libfaketime.o: libfaketime.c libfaketime.h
 	$(CC) $(CFLAGS) -Wall -O2 -c libfaketime.c -fPIC -DPIC -o libfaketime.o
