@@ -236,7 +236,7 @@ gettimeofday (struct timeval *tv, void *tz)
 }
 
 int
-clock_gettime(clockid_t clk_id, struct timespec *tp)
+clock_gettime (clockid_t clk_id __attribute__((unused)), struct timespec *tp)
 {
   static int retval = 0;
 
