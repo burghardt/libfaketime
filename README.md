@@ -1,36 +1,44 @@
-The LibFakeTime library adds filter to function time().
+# libFakeTime
+LibFakeTime - a library that adds a filter to time() function calls
 
-Dynamically linked programs which checking time using time() or gettimeofday()
-will report fake time, so it is possible to send e-mail to friend with
-date of his birth after this date if we forgot. ;-P
+Dynamically linked programs that check the time using the `time()`
+or `gettimeofday()` functions would report fake time to make it possible
+to send an e-mail to a friend with the date of his birthday after this
+date has already passed if one forgot.
 
-You can also use it to warp time in xclock. Or to make some shareware program
-works after expiration date (but this is obviously illegal).
+You can also use it to warp time in `xclock` or to test programs dealing
+with expiration dates (i.e., shareware programs work forever,
+SSL certificates never expire, and debugged programs start each time
+with the same time settings).
 
-For more information (about usage of library) see manual (libfaketime.8).
+For more information about library usage, refer to the manual
+([libfaketime.8](libfaketime.8)).
 
 I used some code from:
  - Anubis (GPL): http://www.gnu.org/projects/anubis/,
  - libsafe (LGPL): http://www.bell-labs.com/org/11356/libsafe.html,
 
-To build the library:
-        make            (This will make libfaketime.so.1)
-        make install    (make install must be done as root)
+To build and install library:
 
-LibFakeTime library have two configure option (see Makefile),
-     -DDEBUG            (This enable _very_ noisy debug code,
-        (optional)       not very useful for normal users, just for programmers)
-     -DKILLER           (This enable killer code,
-        (optional)       if library cannot read fake code from file,
-                         it will kill your process. Useful with programs
-                         writing timestamps - cannot get fake time,
-                         prevent program from make timestamps.
-                         DANGER: IT CAN KILL YOUR INIT AND LEAD TO BOOT FAILURE!)
+    make          # this will make libfaketime.so.1
+    make install  # make install must be done as root or with sudo
 
-The makefile will only copy the library and man page to the appropriate
-directories.  To activate libfaketime, either on a per-process basis or on a
-system-wide basis, see the man page (libfaketime.8, Section "Installing
-libfaketime").
+LibFakeTime library has two configure options (see [Makefile](Makefile)).
 
-See http://www.burghardt.pl/ for more information and new releases.
-Send comments and bug reports to krzysztof@burghardt.pl.
+    -DDEBUG  # (optional) This enables verbose debug code. Not very useful
+               for regular usage, but it might be helpful for troubleshooting.
+    -DKILLER # (optional) This enables the killer code. If the library cannot
+               read fake time from the file, it will kill the process. Helpful
+               with programs writing timestamps or invalidating something after
+               the expiration date.
+
+               DANGER: THIS OPTION CAN KILL YOUR INIT AND LEAD TO BOOT FAILURE
+                       IF ENABLED SYSTEM-WIDE!
+
+The `Makefile` install target will only copy the library and man page to the
+appropriate directories. To activate libfaketime, either on a per-process
+basis or a system-wide basis, see the section "Installing libfaketime"
+on the manual page.
+
+See http://github.com/burghardt/libfaketime for more information and new
+releases. Send comments and bug reports to <krzysztof@burghardt.pl>.
