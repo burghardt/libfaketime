@@ -1,3 +1,7 @@
+2023-02-19 Krzysztof Burghardt
+	* libfaketime.c: allow ld.so to search for libc.so.6
+	  (/lib absolute path removed to support multi-arch)
+
 2007-11-01 Krzysztof Burghardt
 	* libfaketime.c: add support for clock_gettime()
 
