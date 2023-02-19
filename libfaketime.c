@@ -274,8 +274,8 @@ static void _libfaketime_fini () __attribute__((destructor));
 static void
 _libfaketime_init (void)
 {
+  static const int exe_len = 1024;
   time_t time_to_return = 0;
-  const static int exe_len = 1024;
   char *error;
   char *exe;
 
