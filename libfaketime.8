@@ -54,7 +54,7 @@ point to the libfaketime library. Example (sh syntax):
 .nf
 .ft 3
 .in +0.3i
-      LD_PRELOAD=/lib/libfaketime.so.1
+      LD_PRELOAD=libfaketime.so.1
       export LD_PRELOAD
 .fi
 .in -0.3i
@@ -69,7 +69,7 @@ or (csh syntax):
 .nf
 .ft 3
 .in +0.3i
-      setenv LD_PRELOAD /lib/libfaketime.so.1
+      setenv LD_PRELOAD libfaketime.so.1
 .fi
 .in -0.3i
 .ft R
@@ -195,7 +195,7 @@ not listed in *.fake files can get a valid (actual) time/date. Read sources
 for more information.
 .SH FILES
 .HP
-.I /lib/libfaketime.so.<version>
+.I /{lib,lib64}/libfaketime.so.<version>
 - main library
 .HP
 .I /usr/man/man8/libfaketime.8

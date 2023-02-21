@@ -74,7 +74,7 @@ Configure fake timestamp, preload library and run target program.
 
     mkdir -p  ~/.libfaketime.d
     date -d 20200101 +%s > ~/.libfaketime.d/date.fake
-    env LD_PRELOAD=/lib/libfaketime.so.1 date -R # prints "Wed, 01 Jan 2020  00:00:00 +0100"
+    env LD_PRELOAD=libfaketime.so.1 date -R # prints "Wed, 01 Jan 2020  00:00:00 +0100"
 
 ## Acknowledgments
 

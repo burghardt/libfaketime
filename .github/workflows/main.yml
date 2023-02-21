@@ -22,4 +22,4 @@ jobs:
           mkdir -p  ~/.libfaketime.d
           date -d 20200101 +%s > ~/.libfaketime.d/date.fake
       - name: smoke test
-        run: env LD_PRELOAD=/lib/libfaketime.so.1 date -R
+        run: env LD_PRELOAD=libfaketime.so.1 date -R

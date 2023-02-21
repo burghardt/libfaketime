@@ -32,6 +32,8 @@ CFLAGS += -fstack-protector-strong -fPIC -fPIE
 LDFLAGS += -pie -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
 LDFLAGS += -Wl,--as-needed -Wl,-Bsymbolic-functions -Wl,--fatal-warnings
 
+LIBDIRSUFFIX = $(shell test `uname -s` = Linux && test `uname -m` = x86_64 && echo 64)
+
 libfaketime.so.1: libfaketime.o
 	$(CC) $(LDFLAGS) -shared libfaketime.o -fPIC -ldl -Wl,-soname -Wl,libfaketime.so.1 -o libfaketime.so.1
 
@@ -39,8 +41,8 @@ libfaketime.o: libfaketime.c libfaketime.h
 	$(CC) $(CFLAGS) -Wall -O2 -c libfaketime.c -fPIC -DPIC -o libfaketime.o
 
 install:
-	install -c -s -m 0755 libfaketime.so.1 /lib
-	install -c    -m 0644 libfaketime.8 /usr/share/man/man8/
+	install -c -s -m 0755 libfaketime.so.1 $(DESTDIR)/lib$(LIBDIRSUFFIX)
+	install -c    -m 0644 libfaketime.8 $(DESTDIR)/usr/share/man/man8/
 
 clean:
 	rm -f *.o *~ libfaketime.so*
