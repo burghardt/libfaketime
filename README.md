@@ -34,6 +34,13 @@ Build sources with `make` to create binary `libfaketime.so.1`.
 
     make
 
+#### Build architecture
+
+`CFLAGS` and `LDFLAGS` allow building for foreign architecture on multilib
+systems (i.e. 32-bit library on 64-bit userland).
+
+    env CFLAGS=-m32 LDFLAGS=-m32 make
+
 #### Build options
 
 LibFakeTime library has two optional build-time configuration options
