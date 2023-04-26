@@ -23,3 +23,17 @@ jobs:
           date -d 20200101 +%s > ~/.libfaketime.d/date.fake
       - name: smoke test
         run: env LD_PRELOAD=libfaketime.so.1 date -R
+  macos:
+    name: macos
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@master
+      - name: make
+        run: make
+      - name: configure
+        run: |
+          mkdir -p  ~/.libfaketime.d
+          date -j -f %Y%m%d-%H%M%S 20200101-000000 +%s > ~/.libfaketime.d/date.fake
+      - name: smoke test
+        run: env DYLD_INSERT_LIBRARIES=./libfaketime.dylib date -R
