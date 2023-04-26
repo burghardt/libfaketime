@@ -29,6 +29,9 @@
 #define __USE_GNU 1
 #include <dlfcn.h>		/* dlsym() */
 #include <syslog.h>		/* syslog() */
+#ifdef __APPLE__
+#include <libproc.h>
+#endif
 
 /* Define system and user configuration directory */
 #define SYS_FAKE_TIME_DIR "/etc/libfaketime.d"

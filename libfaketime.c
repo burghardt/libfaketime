@@ -76,7 +76,11 @@ get_exe (char *exe, int size)
   char *temp;
   temp = xmalloc (size);
 
+#ifdef __APPLE__
+  if (proc_pidpath (getpid(), temp, size) <= 0)
+#else
   if (readlink ("/proc/self/exe", temp, size) <= 0)
+#endif
     {
       exe[0] = '\0';
       DEBUG_MESSAGE ("LibFakeTime: get_exe(): cannot get exe name...\n");
@@ -165,7 +169,7 @@ get_fake_time (const char *dir, char *exe)
 	}
       fclose (fd);
       DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): opened %s\n", path);
-      DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): readed %s\n", buf);
+      DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): read %s\n", buf);
     }
   free (buf);
   buf = NULL;
@@ -179,24 +183,36 @@ get_fake_time (const char *dir, char *exe)
 }
 
 time_t
+#ifdef __APPLE__
+faketime (time_t * t)
+#else
 time (time_t * t)
+#endif
 {
   static time_t time_to_return = 0;
 
-  /* Check if we are  already after _init and do _init if not yet */
+  /* Check if we are already after _init and do _init if not yet */
   if (!init_done)
     _libfaketime_init ();
 
   if (real_time)
     {
+#ifdef __APPLE__
+      time_to_return = time (NULL);
+#else
       time_to_return = (*real_time_handle) (NULL);
+#endif
       DEBUG_MESSAGE
 	("LibFakeTime: time(): returning REAL time (%i)\n",
 	 (unsigned int) time_to_return);
     }
   else
     {
+#ifdef __APPLE__
+      time_to_return = time (NULL) - fake_time;
+#else
       time_to_return = (*real_time_handle) (NULL) - fake_time;
+#endif
       DEBUG_MESSAGE
 	("LibFakeTime: time(): returning FAKE time (%i)\n",
 	 (unsigned int) time_to_return);
@@ -279,7 +295,11 @@ _libfaketime_init (void)
 
   exe = xmalloc (exe_len);
 
+#ifdef __APPLE__
+  lib_handle = dlopen ("libSystem.B.dylib", RTLD_LAZY);
+#else
   lib_handle = dlopen ("libc.so.6", RTLD_LAZY);
+#endif
   if (!lib_handle)
     {
       fprintf (stderr, "%s\n", dlerror ());
@@ -321,14 +341,13 @@ _libfaketime_init (void)
   if (time_to_return)
     {
       real_time = FALSE;
-#ifdef HAVE_SYSLOG_H
-      openlog ("LibFakeTime", LOG_CONS | LOG_NDELAY, LOG_USER);
-      syslog (LOG_WARNING,
-	      "using FAKE time() for (%s:%i) UID(%i) EUID(%i)",
+      DEBUG_MESSAGE("using FAKE time() for (%s:%i) UID(%i) EUID(%i)\n",
 	      exe, getpid (), getuid (), geteuid ());
-      closelog ();
-#endif
+#ifdef __APPLE__
+      fake_time = time (NULL) - time_to_return;
+#else
       fake_time = (*real_time_handle) (NULL) - time_to_return;
+#endif
     }
   else
     {
@@ -346,3 +365,10 @@ _libfaketime_fini (void)
   DEBUG_MESSAGE ("LibFakeTime: _fini(): finalizing library...\n");
   dlclose (lib_handle);
 }
+
+#ifdef __APPLE__
+#define DYLD_INTERPOSE(_replacment,_replacee) \
+__attribute__((used)) static struct{ const void* replacment; const void* replacee; } _interpose_##_replacee \
+__attribute__ ((section ("__DATA,__interpose"))) = { (const void*)(unsigned long)&_replacment, (const void*)(unsigned long)&_replacee };
+DYLD_INTERPOSE(faketime, time);
+#endif
