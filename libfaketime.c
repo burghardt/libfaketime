@@ -23,12 +23,12 @@ static void _libfaketime_fini (void) __attribute__((destructor));
 
 extern char **environ[];
 
-static int init_done = FALSE;	/* return 1 if _init was run, or 0 otherwise */
-static int real_time = TRUE;	/* return real time if 1, or fake if 0 */
-static time_t fake_time = 0;	/* fake time readed from file */
-void *lib_handle;		/* system library handle */
-time_t (*real_time_handle) (time_t *) = NULL;	/* system time() handle */
-int (*real_gettimeofday_handle) (struct timeval * tv, struct timezone * tz) = NULL;	/* system gettimeofday() handle */
+static int init_done = FALSE;  /* return 1 if _init was run, or 0 otherwise */
+static int real_time = TRUE;   /* return real time if 1, or fake if 0 */
+static time_t fake_time = 0;   /* fake time readed from file */
+void *lib_handle;              /* system library handle */
+time_t (*real_time_handle) (time_t *) = NULL; /* system time() handle */
+int (*real_gettimeofday_handle) (struct timeval * tv, struct timezone * tz) = NULL; /* system gettimeofday() handle */
 
 static void *
 xmalloc (int n)
@@ -40,7 +40,7 @@ xmalloc (int n)
   if (!p)
     {
       DEBUG_MESSAGE
-	("LibFakeTime: xmalloc(): cannot alocate %i bytes...\n", n);
+       ("LibFakeTime: xmalloc(): cannot alocate %i bytes...\n", n);
 #ifdef KILLER
       /*
        * Should it kill proces?!
@@ -116,7 +116,7 @@ can_i_fake_test (const char *dir, char *exe)
   if (!fd)
     {
       DEBUG_MESSAGE
-	("LibFakeTime: can_i_fake_test(): cannot open %s\n", path);
+       ("LibFakeTime: can_i_fake_test(): cannot open %s\n", path);
       DEBUG_MESSAGE ("LibFakeTime: can_i_fake_test(): returning TRUE\n");
       ret = TRUE;
     }
@@ -153,16 +153,16 @@ get_fake_time (const char *dir, char *exe)
   else
     {
       if (fgets (buf, buf_len - 1, fd) != NULL)
-	{
-	  buf[strlen (buf) - 1] = '\0';
-	  read_fake_time = (time_t) atoi (buf);
-	}
+       {
+         buf[strlen (buf) - 1] = '\0';
+         read_fake_time = (time_t) atoi (buf);
+       }
       else
-	{
-	  read_fake_time = 0;
-	  DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): cannot read %s\n",
-			 path);
-	}
+       {
+         read_fake_time = 0;
+         DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): cannot read %s\n",
+                      path);
+       }
       fclose (fd);
       DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): opened %s\n", path);
       DEBUG_MESSAGE ("LibFakeTime: get_fake_time(): readed %s\n", buf);
@@ -191,15 +191,15 @@ time (time_t * t)
     {
       time_to_return = (*real_time_handle) (NULL);
       DEBUG_MESSAGE
-	("LibFakeTime: time(): returning REAL time (%i)\n",
-	 (unsigned int) time_to_return);
+       ("LibFakeTime: time(): returning REAL time (%i)\n",
+        (unsigned int) time_to_return);
     }
   else
     {
       time_to_return = (*real_time_handle) (NULL) - fake_time;
       DEBUG_MESSAGE
-	("LibFakeTime: time(): returning FAKE time (%i)\n",
-	 (unsigned int) time_to_return);
+       ("LibFakeTime: time(): returning FAKE time (%i)\n",
+        (unsigned int) time_to_return);
     }
 
   if (t != 0)
@@ -242,13 +242,6 @@ clock_gettime (clockid_t clk_id __attribute__((unused)), struct timespec *tp)
   if (!init_done)
     _libfaketime_init ();
 
-  /* Just to be sure... */
-  if (tp == NULL)
-    {
-      DEBUG_MESSAGE
-	("LibFakeTime: clock_gettime(): returning due to NULL pointers...\n");
-      return 0;
-    }
   struct timeval tv;
   retval = gettimeofday (&tv, NULL);
   DEBUG_MESSAGE ("LibFakeTime: clock_gettime(): retval = %i...\n", retval);
@@ -258,7 +251,7 @@ clock_gettime (clockid_t clk_id __attribute__((unused)), struct timespec *tp)
          _VALID_ tv_usec due to many programs uses this for hi-res timing
          only tv_sec can be (safely) affected */
       DEBUG_MESSAGE
-	("LibFakeTime: clock_gettime(): setting *tp->tv_(u)sec...\n");
+       ("LibFakeTime: clock_gettime(): setting *tp->tv_(u)sec...\n");
       tp->tv_sec = tv.tv_sec;
       tp->tv_nsec = tv.tv_usec * 1000;
     }
@@ -313,9 +306,9 @@ _libfaketime_init (void)
       user_path = NULL;
 
       if (!time_to_return)
-	{
-	  time_to_return = get_fake_time (SYS_FAKE_TIME_DIR, exe);
-	}
+       {
+         time_to_return = get_fake_time (SYS_FAKE_TIME_DIR, exe);
+       }
     }
 
   if (time_to_return)
@@ -324,8 +317,8 @@ _libfaketime_init (void)
 #ifdef HAVE_SYSLOG_H
       openlog ("LibFakeTime", LOG_CONS | LOG_NDELAY, LOG_USER);
       syslog (LOG_WARNING,
-	      "using FAKE time() for (%s:%i) UID(%i) EUID(%i)",
-	      exe, getpid (), getuid (), geteuid ());
+             "using FAKE time() for (%s:%i) UID(%i) EUID(%i)",
+             exe, getpid (), getuid (), geteuid ());
       closelog ();
 #endif
       fake_time = (*real_time_handle) (NULL) - time_to_return;
